@@ -33,7 +33,7 @@ pub const PgClient = struct {
 
 pub const PgReplicationSlot = struct {
     conn_handle: *c.PGconn,
-    current_c_buf: [*c]u8 = null;
+    current_c_buf: [*c]u8 = null,
 
     pub fn init(conn_handle: *c.PGconn) PgReplicationSlot {
         return PgReplicationSlot{ .conn_handle = conn_handle };
@@ -104,7 +104,6 @@ pub const PgReplicationSlot = struct {
             &c_buf,
             0,
         );
-        
     }
 
     pub fn pollLoop(
