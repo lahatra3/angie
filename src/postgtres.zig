@@ -33,6 +33,11 @@ pub const PgClient = struct {
 
 pub const PgReplicationSlot = struct {
     conn_handle: *c.PGconn,
+    current_c_buf: [*c]u8 = null;
+
+    pub fn init(conn_handle: *c.PGconn) PgReplicationSlot {
+        return PgReplicationSlot{ .conn_handle = conn_handle };
+    }
 
     pub fn create(self: *PgReplicationSlot, slot_name: []const u8) !void {
         var buf: [256]u8 = undefined;
@@ -88,7 +93,21 @@ pub const PgReplicationSlot = struct {
         }
     }
 
-    pub fn pollReplicationSlot(
+    fn poll(
+        self: *PgReplicationSlot,
+        comptime Handler: type,
+        handler: *Handler,
+    ) !void {
+        var c_buf: [*c]u8 = null;
+        const bytes_read = c.PQgetCopyData(
+            self.conn_handle,
+            &c_buf,
+            0,
+        );
+        
+    }
+
+    pub fn pollLoop(
         self: *PgReplicationSlot,
         io: std.Io,
         running: *std.atomic.Value(bool),
@@ -105,7 +124,7 @@ pub const PgReplicationSlot = struct {
 
             if (bytes_read > 0) {
                 defer c.PQfreemem(c_buf);
-                try handler.handleWalPayload(c_buf[0..@intCast(bytes_read)]);
+                try handler.handleWal(c_buf[0..@intCast(bytes_read)]);
             } else if (bytes_read == 0) {
                 try io.sleep(
                     .fromMilliseconds(10),
