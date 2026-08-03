@@ -1,0 +1,73 @@
+services:
+  # Le nœud coordinateur (le point d'entrée pour vos requêtes SQL)
+  master:
+    container_name: "citus_coordinator"
+    image: "citusdata/citus:12.1"
+    ports: 
+      - "5432:5432"
+    labels: 
+      - "com.citusdata.role=Master"
+    environment: &AUTH
+      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-postgres31}"
+      PGUSER: "${POSTGRES_USER:-postgres}"
+      PGPASSWORD: "${POSTGRES_PASSWORD:-postgres31}"
+      POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
+      POSTGRES_DB: ldf
+      DOCKER_API_VERSION: "auto"
+    volumes:
+      - ./conf/init_master.sql:/docker-entrypoint-initdb.d/init_master.sql
+      - coordinator_data:/var/lib/postgresql/data
+
+  # Les nœuds de stockage et de calcul (Workers)
+  worker-1:
+    container_name: "citus_worker_1"
+    image: "citusdata/citus:12.1"
+    ports: 
+      - "5433:5432"
+    labels: 
+      - "com.citusdata.role=Worker"
+    environment: *AUTH
+    volumes:
+      - ./conf/init_worker.sql:/docker-entrypoint-initdb.d/init_worker.sql
+      - healthcheck-volume:/healthcheck
+
+  worker-2:
+    container_name: "citus_worker_2"
+    image: "citusdata/citus:12.1"
+    ports: 
+      - "5434:5432"
+    labels: 
+      - "com.citusdata.role=Worker"
+    environment: *AUTH
+    volumes:
+      - ./conf/init_worker.sql:/docker-entrypoint-initdb.d/init_worker.sql
+      - healthcheck-volume:/healthcheck
+  
+  worker-3:
+    container_name: "citus_worker_3"
+    image: "citusdata/citus:12.1"
+    ports: 
+      - "5435:5432"
+    labels: 
+      - "com.citusdata.role=Worker"
+    environment: *AUTH
+    volumes:
+      - ./conf/init_worker.sql:/docker-entrypoint-initdb.d/init_worker.sql
+      - healthcheck-volume:/healthcheck
+  
+  worker-4:
+    container_name: "citus_worker_4"
+    image: "citusdata/citus:12.1"
+    ports: 
+      - "5436:5432"
+    labels: 
+      - "com.citusdata.role=Worker"
+    environment: *AUTH
+    volumes:
+      - ./conf/init_worker.sql:/docker-entrypoint-initdb.d/init_worker.sql
+      - healthcheck-volume:/healthcheck
+
+volumes:
+  coordinator_data:
+  healthcheck-volume:

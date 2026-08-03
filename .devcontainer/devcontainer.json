@@ -1,0 +1,21 @@
+{
+    "name": "Dev Environment",
+    "image": "lahatra3/pzenv:18.3-0.16.0", 
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ziglang.vscode-zig"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "/bin/bash",
+                        "icon": "terminal-bash"
+                    }
+                }
+            }
+        }
+    },
+    "remoteUser": "lahatra3"
+}

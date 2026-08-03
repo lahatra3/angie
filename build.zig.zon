@@ -1,0 +1,12 @@
+.{
+    .name = .angie,
+    .version = "0.0.0",
+    .fingerprint = 0x7df6b14cda4dc0fb,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
