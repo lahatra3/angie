@@ -1,9 +1,11 @@
 const std = @import("std");
-const PgClient = @import("postgres/client.zig").PgClient;
+
+const c = @import("pg/c.zig").c;
 
 pub fn main(init: std.process.Init) !void {
-    _ = init;
+    const io = init.io;
+    const allocator = init.arena.allocator();
 
-    var pg_client = try PgClient.connect("host=172.17.0.1 port=5432 dbname=ldf user=postgres password=postgres31");
-    defer pg_client.deinit();
+    _ = io;
+    _ = allocator;
 }

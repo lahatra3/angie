@@ -1,12 +1,19 @@
 .{
     .name = .angie,
-    .version = "0.0.0",
+    .version = "0.0.1",
     .fingerprint = 0x7df6b14cda4dc0fb,
     .minimum_zig_version = "0.16.0",
-    .dependencies = .{},
+    .dependencies = .{
+        .libpq = .{
+            .url = "git+https://github.com/allyourcodebase/libpq?ref=master#925fa037a81952343b255f88f795257a8006f27d",
+            .hash = "libpq-5.18.4-QME6ad0UAQBVEzKd7H4tswrfCnTZB_1Kjw09tXeUKQK1",
+        },
+    },
     .paths = .{
         "build.zig",
         "build.zig.zon",
         "src",
+        "LICENSE",
+        "README.md",
     },
 }
